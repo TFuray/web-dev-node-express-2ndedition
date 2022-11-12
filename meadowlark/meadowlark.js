@@ -1,5 +1,6 @@
 const express = require('express')
 const { engine } = require('express-handlebars')
+const fortune = require('./lib/fortune')
 
 
 const app = express()
@@ -19,16 +20,6 @@ app.set("views", "./views")
 
 const port = process.env.PORT || 3003
 
-
-//fortures for main page
-const fortunes = [
-  'Conquer your fears or they wil conquer you.',
-  'Rivers need springs.',
-  "Do not fear what you don't know.",
-  'You wil have a pleasant surprise',
-  'Whenever possible, keep it simple.'
-]
-
 // configure middleware
 app.use(express.static(__dirname + '/public'))
 
@@ -39,8 +30,7 @@ app.get('/', (req, res) => {
 
 // @route --- about
 app.get('/about', (req, res) => {
-  const randomFortune = fortunes[Math.floor(Math.random() * fortunes.length)]
-  res.render('about', { fortune: randomFortune })
+  res.render('about', { fortune: fortune.getFortune() })
 })
 
 // custom 404 page
