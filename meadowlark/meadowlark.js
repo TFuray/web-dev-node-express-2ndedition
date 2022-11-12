@@ -1,8 +1,24 @@
 const express = require('express')
-const expressHandlebars = require('express-handlebars')
+const { engine } = require('express-handlebars')
+
 
 const app = express()
+
+// Handlebars
+app.engine(
+  "handlebars",
+  engine({
+    extname: "handlebars",
+    // defaultLayout: false,
+    layoutsDir: "./views/layouts/",
+    defaultLayout: 'main',
+  })
+)
+app.set("view engine", "handlebars")
+app.set("views", "./views")
+
 const port = process.env.PORT || 3003
+
 
 //fortures for main page
 const fortunes = [
@@ -12,15 +28,6 @@ const fortunes = [
   'You wil have a pleasant surprise',
   'Whenever possible, keep it simple.'
 ]
-
-// configure handlebars view engine
-app.engine(
-  'handlebars',
-  expressHandlebars({
-    defaultLayout: 'main'
-  })
-)
-app.set('view engine', 'handlebars')
 
 // configure middleware
 app.use(express.static(__dirname + '/public'))
@@ -47,4 +54,8 @@ app.use((err, req, res, next) => {
   console.error(err.message)
   res.status(500)
   res.render('500')
+})
+
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`)
 })
