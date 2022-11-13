@@ -9,12 +9,14 @@
   "main": "meadowlark.js",
   "scripts": {
     "dev": "nodemon meadowlark",
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint meadowlark.js lib"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "eslint": "^8.27.0",
     "jest": "^29.3.1",
     "portfinder": "^1.0.32",
     "puppeteer": "^19.2.2"
