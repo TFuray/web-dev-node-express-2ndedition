@@ -1,6 +1,8 @@
 const express = require('express')
 const { engine } = require('express-handlebars')
+const port = process.env.PORT || 3003
 const fortune = require('./lib/fortune')
+const handlers = require('./lib/handlers')
 
 
 const app = express()
@@ -18,7 +20,12 @@ app.engine(
 app.set("view engine", "handlebars")
 app.set("views", "./views")
 
-const port = process.env.PORT || 3003
+// Handlers
+app.get('/', handlers.home)
+app.get('/about', handlers.about)
+
+app.use(handlers.notFound)
+app.use(handlers.serverError)
 
 // configure middleware
 app.use(express.static(__dirname + '/public'))
