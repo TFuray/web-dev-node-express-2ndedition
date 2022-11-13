@@ -4,21 +4,27 @@ const port = process.env.PORT || 3003
 const fortune = require('./lib/fortune')
 const handlers = require('./lib/handlers')
 
-
 const app = express()
 
 // Handlebars
 app.engine(
-  "handlebars",
+  'handlebars',
   engine({
-    extname: "handlebars",
+    extname: 'handlebars',
     // defaultLayout: false,
-    layoutsDir: "./views/layouts/",
+    layoutsDir: './views/layouts/',
     defaultLayout: 'main',
+    helpers: {
+      section: function (name, options) {
+        if (!this._sections) this._sections = {}
+        this._sections[name] = options.fn(this)
+        return null
+      }
+    }
   })
 )
-app.set("view engine", "handlebars")
-app.set("views", "./views")
+app.set('view engine', 'handlebars')
+app.set('views', './views')
 
 // Handlers
 app.get('/', handlers.home)
@@ -28,7 +34,7 @@ app.use(handlers.notFound)
 app.use(handlers.serverError)
 
 // configure middleware
-app.use(express.static(__dirname + '/public'))
+app.use(express.static(__dirname + './public'))
 
 // @route --- home
 app.get('/', (req, res) => {
@@ -53,11 +59,13 @@ app.use((err, req, res, next) => {
   res.render('500')
 })
 
-if(require.main === module) {
+if (require.main === module) {
   app.listen(port, () => {
-    console.log( `Express started on http://localhost:${port}` + ': press Ctrl-C to terminate.' ) 
+    console.log(
+      `Express started on http://localhost:${port}` +
+        ': press Ctrl-C to terminate.'
+    )
   })
 } else {
   module.exports = app
 }
-
