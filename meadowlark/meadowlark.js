@@ -1,5 +1,5 @@
 const express = require('express')
-const expressHandlebars = require('express-handlebars')
+const { engine } = require('express-handlebars')
 const bodyParser = require('body-parser')
 const multiparty = require('multiparty')
 
@@ -8,10 +8,13 @@ const weatherMiddlware = require('./lib/middleware/weather')
 
 const app = express()
 
-// configure Handlebars view engine
+// Handlebars
 app.engine(
   'handlebars',
-  expressHandlebars({
+  engine({
+    extname: 'handlebars',
+    // defaultLayout: false,
+    layoutsDir: './views/layouts/',
     defaultLayout: 'main',
     helpers: {
       section: function (name, options) {
@@ -23,6 +26,8 @@ app.engine(
   })
 )
 app.set('view engine', 'handlebars')
+app.set('views', './views')
+
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
