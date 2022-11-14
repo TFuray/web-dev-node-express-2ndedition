@@ -3,6 +3,7 @@ const { engine } = require('express-handlebars')
 const port = process.env.PORT || 3003
 const fortune = require('./lib/fortune')
 const handlers = require('./lib/handlers')
+const bodyParser = require('body-parser')
 
 const app = express()
 
@@ -35,6 +36,7 @@ app.use(handlers.serverError)
 
 // configure middleware
 app.use(express.static(__dirname + './public'))
+app.use(bodyParser.urlencoded({ extended: true }))
 
 // @route --- home
 app.get('/', (req, res) => {
