@@ -28,7 +28,6 @@ app.engine(
 app.set('view engine', 'handlebars')
 app.set('views', './views')
 
-
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
@@ -44,6 +43,15 @@ app.get('/', handlers.home)
 app.get('/newsletter-signup', handlers.newsletterSignup)
 app.post('/newsletter-signup/process', handlers.newsletterSignupProcess)
 app.get('/newsletter-signup/thank-you', handlers.newsletterSignupThankYou)
+
+//handlers for photo submission
+app.post('/contest/vacation-photo/:year/:month', (req, res) => {
+  const form = new multiparty.Form()
+  form.parse(req, (err, fields, files) => {
+    if (err) return res.status(500).send({ error: err.message })
+handlers.vacationPhotoContestProcess(req, res, fields, files)
+  })
+})
 
 // handlers for fetch/JSON form submission
 app.get('/newsletter', handlers.newsletter)
