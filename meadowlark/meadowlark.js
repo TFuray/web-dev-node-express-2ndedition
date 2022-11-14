@@ -7,6 +7,11 @@ const bodyParser = require('body-parser')
 
 const app = express()
 
+// configure middleware
+app.use(express.static(__dirname + './public'))
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
+
 // Handlebars
 app.engine(
   'handlebars',
@@ -34,10 +39,8 @@ app.get('/about', handlers.about)
 app.use(handlers.notFound)
 app.use(handlers.serverError)
 
-// configure middleware
-app.use(express.static(__dirname + './public'))
-app.use(bodyParser.urlencoded({ extended: true }))
-
+app.get('/newsletter', handlers.newsletter)
+app.post('/api/newsleter-signup', handlers.api.newsletterSignup)
 // @route --- home
 app.get('/', (req, res) => {
   res.render('home')
