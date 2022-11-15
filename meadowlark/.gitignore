@@ -1,3 +1,4 @@
 node_modules
 web-development-with-node-and-express-2e
 coverage
+.credentials.*

@@ -2,7 +2,7 @@ const express = require('express')
 const { engine } = require('express-handlebars')
 const bodyParser = require('body-parser')
 const multiparty = require('multiparty')
-
+const { credentials } = require('./config')
 const handlers = require('./lib/handlers')
 const weatherMiddlware = require('./lib/middleware/weather')
 
