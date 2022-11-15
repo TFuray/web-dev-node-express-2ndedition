@@ -2,9 +2,12 @@ const express = require('express')
 const { engine } = require('express-handlebars')
 const bodyParser = require('body-parser')
 const multiparty = require('multiparty')
+const cookieParser = require('cookie-parser')
+const expressSession = require('express-session')
 const { credentials } = require('./config')
 const handlers = require('./lib/handlers')
 const weatherMiddlware = require('./lib/middleware/weather')
+const flashMiddleware = require('./lib/middleware/flash')
 
 const app = express()
 
@@ -30,13 +33,21 @@ app.set('views', './views')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
+app.use(cookieParser(credentials.cookieSecret))
+app.use(expressSession({
+  resave: false,
+  saveUninitialized: false,
+  secret: credentials.cookieSecret,
+}))
 
 const port = process.env.PORT || 3003
 
 app.use(express.static(__dirname + '/public'))
 
 app.use(weatherMiddlware)
+app.use(flashMiddleware)
 
+// handler for home
 app.get('/', handlers.home)
 
 // handlers for browser-based form submission
